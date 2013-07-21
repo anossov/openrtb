@@ -7,7 +7,8 @@ from .base import Object, Array, Field
 
 
 class Bid(Object):
-    u"""
+    u"""At least one bid object is required in a bid set object.
+
     For each bid, the “nurl” attribute contains the win notice URL.
     If the bidder wins the impression, the exchange calls this notice URL
         a) to inform the bidder of the win and
@@ -38,7 +39,8 @@ class Bid(Object):
 
 
 class SeatBid(Object):
-    u"""
+    u"""At least one seatbid object is required in a bid response object.
+
     A bid response can contain multiple “seatbid” objects, each on behalf of a different bidder seat.
     Since a bid request can include multiple impressions,
     each “seatbid” object can contain multiple bids each pertaining to a different impression on behalf of a seat.
@@ -54,8 +56,8 @@ class SeatBid(Object):
 
 
 class BidResponse(Object):
-    u"""
-    The top-level bid response object.
+    u"""The top-level bid response object.
+
     The “id” attribute is a reflection of the bid request ID for logging purposes.
     Similarly, “bidid” is an optional response tracking ID for bidders.
     If specified, it can be included in the subsequent win notice call if the bidder wins.
