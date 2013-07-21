@@ -25,5 +25,5 @@ setup(name='openrtb',
     url='https://github.com/anossov/openrtb',
     license='BSD',
     description='A set of classes implementing OpenRTB 2.0 and OpenRTB Mobile specifications',
-    long_description=readme('README.txt'),
+    long_description=readme('README.rst'),
 )
