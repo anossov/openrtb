@@ -5,3 +5,4 @@ MANIFEST
 /dist/
 /sdist/
 /build/
+.idea
