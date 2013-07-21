@@ -29,7 +29,7 @@ Contains the ``BidRequest`` class and the bid request subobject classes:
 response
 --------------
 
-Contains the ``BidResponse`` class and the bid response subobject classes, `SeatBid` and `Bid`.
+Contains the ``BidResponse`` class and the bid response subobject classes, ``SeatBid`` and ``Bid``.
 
 mobile
 ---------
