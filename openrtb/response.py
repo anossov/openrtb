@@ -3,7 +3,7 @@
 from decimal import Decimal
 
 from . import constants
-from .base import Object, Array, Field
+from .base import Object, Array, String, Field
 
 
 class Bid(Object):
@@ -24,16 +24,16 @@ class Bid(Object):
     Finally, the “attr” array indicates the creative attributes that describe the ad to be served.
     """
 
-    id = Field(unicode, required=True)
-    impid = Field(unicode, required=True)
+    id = Field(String, required=True)
+    impid = Field(String, required=True)
     price = Field(Decimal, required=True)
-    adid = Field(unicode)
-    nurl = Field(unicode)
-    adm = Field(unicode)
-    adomain = Field(Array(unicode))
-    iurl = Field(unicode)
-    cid = Field(unicode)
-    crid = Field(unicode)
+    adid = Field(String)
+    nurl = Field(String)
+    adm = Field(String)
+    adomain = Field(Array(String))
+    iurl = Field(String)
+    cid = Field(String)
+    crid = Field(String)
     attr = Field(Array(constants.CreativeAttribute))
     ext = Field(Object)
 
@@ -51,7 +51,7 @@ class SeatBid(Object):
     """
 
     bid = Field(Array(Bid), required=True)
-    seat = Field(unicode)
+    seat = Field(String)
     group = Field(int)
 
 
@@ -65,11 +65,11 @@ class BidResponse(Object):
     Other attributes are optional since an exchange may establish default values.
     """
 
-    id = Field(unicode, required=True)
+    id = Field(String, required=True)
     seatbid = Field(Array(SeatBid), required=True)
-    bidid = Field(unicode)
-    cur = Field(unicode)
-    customdata = Field(unicode)
+    bidid = Field(String)
+    cur = Field(String)
+    customdata = Field(String)
     ext = Field(Object)
 
     @staticmethod

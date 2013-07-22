@@ -31,6 +31,15 @@ class Field(object):
         return v
 
 
+def String(value):
+    if isinstance(value, unicode):
+        return value
+    if isinstance(value, str):
+        return value.decode('utf-8', errors='ignore')
+
+    return unicode(value)
+
+
 class ObjectMeta(type):
     def __new__(mcs, name, bases, attrs):
         module = attrs.pop('__module__')

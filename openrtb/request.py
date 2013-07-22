@@ -8,7 +8,7 @@ and may optionally include additional objects providing impression context.
 from decimal import Decimal
 
 from . import constants
-from .base import Object, Array, Field
+from .base import Object, Array, String, Field
 
 
 class Publisher(Object):
@@ -18,10 +18,10 @@ class Publisher(Object):
     If an optional parameter is not specified, it should be considered unknown.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
-    cat = Field(Array(unicode))
-    domain = Field(unicode)
+    id = Field(String)
+    name = Field(String)
+    cat = Field(Array(String))
+    domain = Field(String)
 
 
 class Producer(Object):
@@ -34,10 +34,10 @@ class Producer(Object):
     This object is optional, but useful if the content producer is different from the site publisher.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
-    cat = Field(Array(unicode))
-    domain = Field(unicode)
+    id = Field(String)
+    name = Field(String)
+    cat = Field(Array(String))
+    domain = Field(String)
 
 
 class Geo(Object):
@@ -54,12 +54,12 @@ class Geo(Object):
 
     lat = Field(float)
     lon = Field(float)
-    country = Field(unicode)
-    region = Field(unicode)
-    regionfips104 = Field(unicode)
-    metro = Field(unicode)
-    city = Field(unicode)
-    zip = Field(unicode)
+    country = Field(String)
+    region = Field(String)
+    regionfips104 = Field(String)
+    metro = Field(String)
+    city = Field(String)
+    zip = Field(String)
     type = Field(constants.LocationType)
 
     def loc(self):
@@ -76,9 +76,9 @@ class Segment(Object):
     if an optional parameter is not specified, it should be considered unknown.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
-    value = Field(unicode)
+    id = Field(String)
+    name = Field(String)
+    value = Field(String)
 
 
 class Data(Object):
@@ -92,8 +92,8 @@ class Data(Object):
     If an optional parameter is not specified, it should be considered unknown.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
+    id = Field(String)
+    name = Field(String)
     segment = Field(Array(Segment))
 
 
@@ -109,12 +109,12 @@ class User(Object):
     If device ID is used as a proxy for unique user ID, use the device object.
     """
 
-    id = Field(unicode)
-    buyerid = Field(unicode)
+    id = Field(String)
+    buyerid = Field(String)
     yob = Field(int)
-    gender = Field(unicode)
-    keywords = Field(unicode)
-    customdata = Field(unicode)
+    gender = Field(String)
+    keywords = Field(String)
+    customdata = Field(String)
     geo = Field(Geo)
     data = Field(Array(Data))
 
@@ -132,24 +132,24 @@ class Device(Object):
     """
 
     dnt = Field(int)
-    ua = Field(unicode)
-    ip = Field(unicode)
+    ua = Field(String)
+    ip = Field(String)
     geo = Field(Geo, default=Geo())
-    didsha1 = Field(unicode)
-    didmd5 = Field(unicode)
-    dpidsha1 = Field(unicode)
-    dpidmd5 = Field(unicode)
-    ipv6 = Field(unicode)
-    carrier = Field(unicode)
-    language = Field(unicode)
-    make = Field(unicode)
-    model = Field(unicode)
-    os = Field(unicode)
-    osv = Field(unicode)
+    didsha1 = Field(String)
+    didmd5 = Field(String)
+    dpidsha1 = Field(String)
+    dpidmd5 = Field(String)
+    ipv6 = Field(String)
+    carrier = Field(String)
+    language = Field(String)
+    make = Field(String)
+    model = Field(String)
+    os = Field(String)
+    osv = Field(String)
     js = Field(int)
     connectiontype = Field(constants.ConnectionType)
     devicetype = Field(constants.DeviceType)
-    flashver = Field(unicode)
+    flashver = Field(String)
 
     def is_on_cellular(self):
         return self.connectiontype and self.connectiontype.is_cellular()
@@ -168,18 +168,18 @@ class Content(Object):
     (For example, video impressions embedded in an iframe on an unknown web property or device.)
     """
 
-    id = Field(unicode)
+    id = Field(String)
     episode = Field(int)
-    title = Field(unicode)
-    series = Field(unicode)
-    season = Field(unicode)
-    url = Field(unicode)
-    cat = Field(Array(unicode))
+    title = Field(String)
+    series = Field(String)
+    season = Field(String)
+    url = Field(String)
+    cat = Field(Array(String))
     videoquality = Field(constants.VideoQuality)
-    keywords = Field(unicode)
-    contentrating = Field(unicode)
-    userrating = Field(unicode)
-    context = Field(unicode)
+    keywords = Field(String)
+    contentrating = Field(String)
+    userrating = Field(String)
+    context = Field(String)
     livestream = Field(int)
     sourcerelationship = Field(int)
     producer = Field(Producer)
@@ -196,19 +196,19 @@ class Site(Object):
     At a minimum, it’s useful to provide a page URL or a site ID, but this is not strictly required.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
-    domain = Field(unicode)
-    cat = Field(Array(unicode))
-    sectioncat = Field(Array(unicode))
-    pagecat = Field(Array(unicode))
-    page = Field(unicode)
+    id = Field(String)
+    name = Field(String)
+    domain = Field(String)
+    cat = Field(Array(String))
+    sectioncat = Field(Array(String))
+    pagecat = Field(Array(String))
+    page = Field(String)
     privacypolicy = Field(int)
-    ref = Field(unicode)
-    search = Field(unicode)
+    ref = Field(String)
+    search = Field(String)
     publisher = Field(Publisher)
     content = Field(Content)
-    keywords = Field(unicode)
+    keywords = Field(String)
 
 
 class App(Object):
@@ -222,19 +222,19 @@ class App(Object):
     At a minimum, it’s useful to provide an App ID or bundle, but this is not strictly required.
     """
 
-    id = Field(unicode)
-    name = Field(unicode)
-    domain = Field(unicode)
-    cat = Field(Array(unicode))
-    sectioncat = Field(Array(unicode))
-    pagecat = Field(Array(unicode))
-    ver = Field(unicode)
-    bundle = Field(unicode)
+    id = Field(String)
+    name = Field(String)
+    domain = Field(String)
+    cat = Field(Array(String))
+    sectioncat = Field(Array(String))
+    pagecat = Field(Array(String))
+    ver = Field(String)
+    bundle = Field(String)
     privacypolicy = Field(int)
     paid = Field(int)
     publisher = Field(Publisher)
     content = Field(Content)
-    keywords = Field(unicode)
+    keywords = Field(String)
 
 
 class Banner(Object):
@@ -252,11 +252,11 @@ class Banner(Object):
 
     w = Field(int)
     h = Field(int)
-    id = Field(unicode)
+    id = Field(String)
     pos = Field(constants.AdPosition)
     btype = Field(Array(constants.BannerType))
     battr = Field(Array(constants.CreativeAttribute))
-    mimes = Field(Array(unicode))
+    mimes = Field(Array(String))
     topframe = Field(int)
     expdir = Field(Array(constants.ExpandableDirection))
     api = Field(Array(constants.APIFramework))
@@ -280,7 +280,7 @@ class Video(Object):
     or if the exchange chooses not to supply the additional information to the bidder.
     """
 
-    mimes = Field(Array(unicode), required=True)
+    mimes = Field(Array(String), required=True)
     linearity = Field(constants.VideoLinearity, required=True)
     minduration = Field(int, required=True)
     maxduration = Field(int, required=True)
@@ -310,15 +310,15 @@ class Impression(Object):
     Each “imp” object has a required ID so that bids can reference them individually.
     """
 
-    id = Field(unicode, required=True)
+    id = Field(String, required=True)
     banner = Field(Banner)
     video = Field(Video)
-    displaymanager = Field(unicode)
+    displaymanager = Field(String)
     instl = Field(int)
-    tagid = Field(unicode)
+    tagid = Field(String)
     bidfloor = Field(Decimal)
-    bidfloorcur = Field(unicode, default='USD')
-    iframebuster = Field(Array(unicode))
+    bidfloorcur = Field(String, default='USD')
+    iframebuster = Field(Array(String))
     ext = Field(Object)
 
 
@@ -330,7 +330,7 @@ class BidRequest(Object):
     Other attributes are optional since an exchange may establish default values.
     """
 
-    id = Field(unicode, required=True)
+    id = Field(String, required=True)
     imp = Field(Array(Impression), required=True)
     site = Field(Site, default=Site())
     app = Field(App, default=App())
@@ -338,11 +338,11 @@ class BidRequest(Object):
     user = Field(User, default=User())
     at = Field(constants.AuctionType, default=constants.AuctionType.SECOND_PRICE)
     tmax = Field(int)
-    wseat = Field(Array(unicode))
+    wseat = Field(Array(String))
     allimpd = Field(int)
-    cur = Field(Array(unicode))
-    bcat = Field(Array(unicode))
-    badv = Field(Array(unicode))
+    cur = Field(Array(String))
+    bcat = Field(Array(String))
+    badv = Field(Array(String))
     ext = Field(Object)
 
     @staticmethod
