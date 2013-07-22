@@ -6,8 +6,8 @@ from . import request
 
 
 class Impression(Object):
-    impid = Field(str, required=True)
-    wseat = Field(Array(str))
+    impid = Field(unicode, required=True)
+    wseat = Field(Array(unicode))
     h = Field(int)
     w = Field(int)
     pos = Field(constants.AdPosition)
@@ -17,67 +17,67 @@ class Impression(Object):
 
 
 class Device(Object):
-    did = Field(str)
-    dpid = Field(str)
-    ip = Field(str)
-    country = Field(str)
-    carrier = Field(str)
-    ua = Field(str)
-    make = Field(str)
-    model = Field(str)
-    os = Field(str)
-    osv = Field(str)
+    did = Field(unicode)
+    dpid = Field(unicode)
+    ip = Field(unicode)
+    country = Field(unicode)
+    carrier = Field(unicode)
+    ua = Field(unicode)
+    make = Field(unicode)
+    model = Field(unicode)
+    os = Field(unicode)
+    osv = Field(unicode)
     js = Field(int)
-    loc = Field(str)
+    loc = Field(unicode)
 
     connectiontype = constants.ConnectionType.CELLULAR_UNKNOWN_G
     devicetype = constants.DeviceType.MOBILE
 
 
 class User(Object):
-    uid = Field(str)
+    uid = Field(unicode)
     yob = Field(int)
-    gender = Field(str)
-    zip = Field(str)
-    country = Field(str)
-    keywords = Field(str)
+    gender = Field(unicode)
+    zip = Field(unicode)
+    country = Field(unicode)
+    keywords = Field(unicode)
 
 
 class Site(Object):
-    sid = Field(str)
-    name = Field(str)
-    domain = Field(str)
-    pid = Field(str)
-    pub = Field(str)
-    pdomain = Field(str)
-    cat = Field(Array(str))
-    keywords = Field(str)
-    page = Field(str)
-    ref = Field(str)
-    search = Field(str)
+    sid = Field(unicode)
+    name = Field(unicode)
+    domain = Field(unicode)
+    pid = Field(unicode)
+    pub = Field(unicode)
+    pdomain = Field(unicode)
+    cat = Field(Array(unicode))
+    keywords = Field(unicode)
+    page = Field(unicode)
+    ref = Field(unicode)
+    search = Field(unicode)
 
 
 class App(Object):
-    aid = Field(str)
-    name = Field(str)
-    domain = Field(str)
-    pid = Field(str)
-    pub = Field(str)
-    pdomain = Field(str)
-    cat = Field(Array(str))
-    keywords = Field(str)
-    ver = Field(str)
-    bundle = Field(str)
+    aid = Field(unicode)
+    name = Field(unicode)
+    domain = Field(unicode)
+    pid = Field(unicode)
+    pub = Field(unicode)
+    pdomain = Field(unicode)
+    cat = Field(Array(unicode))
+    keywords = Field(unicode)
+    ver = Field(unicode)
+    bundle = Field(unicode)
     paid = Field(int)
 
 
 class Restrictions(Object):
-    bcat = Field(Array(str))
-    badv = Field(Array(str))
+    bcat = Field(Array(unicode))
+    badv = Field(Array(unicode))
 
 
 class BidRequest(Object):
-    id = Field(str, required=True)
+    id = Field(unicode, required=True)
     at = Field(constants.AuctionType, default=constants.AuctionType.SECOND_PRICE)
     tmax = Field(int)
     imp = Field(Array(Impression), required=True)

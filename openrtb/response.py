@@ -24,16 +24,16 @@ class Bid(Object):
     Finally, the “attr” array indicates the creative attributes that describe the ad to be served.
     """
 
-    id = Field(str, required=True)
-    impid = Field(str, required=True)
+    id = Field(unicode, required=True)
+    impid = Field(unicode, required=True)
     price = Field(Decimal, required=True)
-    adid = Field(str)
-    nurl = Field(str)
-    adm = Field(str)
-    adomain = Field(Array(str))
-    iurl = Field(str)
-    cid = Field(str)
-    crid = Field(str)
+    adid = Field(unicode)
+    nurl = Field(unicode)
+    adm = Field(unicode)
+    adomain = Field(Array(unicode))
+    iurl = Field(unicode)
+    cid = Field(unicode)
+    crid = Field(unicode)
     attr = Field(Array(constants.CreativeAttribute))
     ext = Field(Object)
 
@@ -51,7 +51,7 @@ class SeatBid(Object):
     """
 
     bid = Field(Array(Bid), required=True)
-    seat = Field(str)
+    seat = Field(unicode)
     group = Field(int)
 
 
@@ -65,11 +65,11 @@ class BidResponse(Object):
     Other attributes are optional since an exchange may establish default values.
     """
 
-    id = Field(str, required=True)
+    id = Field(unicode, required=True)
     seatbid = Field(Array(SeatBid), required=True)
-    bidid = Field(str)
-    cur = Field(str)
-    customdata = Field(str)
+    bidid = Field(unicode)
+    cur = Field(unicode)
+    customdata = Field(unicode)
     ext = Field(Object)
 
     @staticmethod
