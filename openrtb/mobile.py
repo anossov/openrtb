@@ -148,7 +148,7 @@ class OpenRTB20Adapter(object):
         if brq.device:
             lat = lon = None
             if brq.device.loc:
-                lat, lon = brq.device.split(',')
+                lat, lon = brq.device.loc.split(',')
                 lat, lon = float(lat), float(lon)
             params['device'] = request.Device(
                 didsha1=brq.device.did,
