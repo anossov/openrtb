@@ -8,7 +8,7 @@ def readme(fn):
 
 
 setup(name='openrtb',
-      version='0.0.2',
+      version='0.0.3',
       packages=[
           'openrtb',
       ],
