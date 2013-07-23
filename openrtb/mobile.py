@@ -30,9 +30,6 @@ class Device(Object):
     js = Field(int)
     loc = Field(String)
 
-    connectiontype = constants.ConnectionType.CELLULAR_UNKNOWN_G
-    devicetype = constants.DeviceType.MOBILE
-
 
 class User(Object):
     uid = Field(String)

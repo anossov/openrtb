@@ -422,15 +422,14 @@ CATEGORIES = [
 
 def from_string(s):
     try:
-        if s.startswith('IAB'):
-            s = s[3:]
+        cat = s[3:] if s.startswith('IAB') else s
 
-        if '-' in s:
-            tier1, tier2 = map(int, s.split('-'))
+        if '-' in cat:
+            tier1, tier2 = map(int, cat.split('-'))
             t1c = CATEGORIES[tier1 - 1][0]
             t2c = CATEGORIES[tier1 - 1][1][tier2 - 1]
             return '{}: {}'.format(t1c, t2c)
         else:
-            return CATEGORIES[int(s) - 1][0]
-    except ValueError:
+            return CATEGORIES[int(cat) - 1][0]
+    except (ValueError, IndexError):
         return s
