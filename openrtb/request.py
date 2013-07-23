@@ -134,7 +134,7 @@ class Device(Object):
     dnt = Field(int)
     ua = Field(String)
     ip = Field(String)
-    geo = Field(Geo, default=Geo())
+    geo = Field(Geo)
     didsha1 = Field(String)
     didmd5 = Field(String)
     dpidsha1 = Field(String)
@@ -150,6 +150,9 @@ class Device(Object):
     connectiontype = Field(constants.ConnectionType)
     devicetype = Field(constants.DeviceType)
     flashver = Field(String)
+
+    def get_geo(self):
+        return self.geo or Geo()
 
     def is_on_cellular(self):
         return self.connectiontype and self.connectiontype.is_cellular()
@@ -332,10 +335,10 @@ class BidRequest(Object):
 
     id = Field(String, required=True)
     imp = Field(Array(Impression), required=True)
-    site = Field(Site, default=Site())
-    app = Field(App, default=App())
-    device = Field(Device, default=Device())
-    user = Field(User, default=User())
+    site = Field(Site)
+    app = Field(App)
+    device = Field(Device)
+    user = Field(User)
     at = Field(constants.AuctionType, default=constants.AuctionType.SECOND_PRICE)
     tmax = Field(int)
     wseat = Field(Array(String))
@@ -344,6 +347,18 @@ class BidRequest(Object):
     bcat = Field(Array(String))
     badv = Field(Array(String))
     ext = Field(Object)
+
+    def get_app(self):
+        return self.app or App()
+
+    def get_site(self):
+        return self.site or Site()
+
+    def get_device(self):
+        return self.device or Device()
+
+    def get_user(self):
+        return self.user or User()
 
     @staticmethod
     def minimal(id, imp_id):
