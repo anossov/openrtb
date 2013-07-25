@@ -269,7 +269,7 @@ class TestConstants(unittest.TestCase):
         self.assertIn('Unknown', str(openrtb.constants.BannerType(123)))
 
     def test_none_equal(self):
-        self.assertNotEqual(None, openrtb.constants.BannerType.JS)
+        self.assertFalse(None == openrtb.constants.BannerType.JS)
 
     def test_int_equal(self):
         self.assertEqual(openrtb.constants.BannerType.JS, 3)

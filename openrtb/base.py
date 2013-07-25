@@ -148,6 +148,8 @@ class Enum(object):
         return self.name
 
     def __eq__(self, other):
+        if other is None:
+            return False
         if isinstance(other, self.__class__):
             return self.value == other.value
         if isinstance(other, int):
