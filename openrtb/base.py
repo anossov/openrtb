@@ -6,6 +6,9 @@ class ValidationError(Exception):
     pass
 
 
+identity = lambda x: x
+
+
 class Field(object):
     def __init__(self, datatype, required=False, default=None):
         self.datatype = datatype
@@ -14,10 +17,10 @@ class Field(object):
         self.name = None
         self.object = None
 
-    def deserialize(self, raw_data):
         if hasattr(self.datatype, 'deserialize'):
-            return self.datatype.deserialize(raw_data)
+            self.deserialize = self.datatype.deserialize
 
+    def deserialize(self, raw_data):
         try:
             v = self.datatype(raw_data)
         except (ValueError, TypeError):
@@ -45,11 +48,20 @@ class ObjectMeta(type):
         module = attrs.pop('__module__')
         new_class = super(ObjectMeta, mcs).__new__(mcs, name, bases, {'__module__': module})
         new_class._fields = {}
+        new_class._required = []
+        new_class._deserializers = {}
         for k, v in attrs.items():
             if isinstance(v, Field):
                 v.name = k
                 v.object = new_class
                 new_class._fields[k] = v
+                if hasattr(v.datatype, 'deserialize'):
+                    new_class._deserializers[k] = v.datatype.deserialize
+                else:
+                    new_class._deserializers[k] = v.deserialize
+                if v.required:
+                    new_class._required.append(v.name)
+                setattr(new_class, k, v.default)
             else:
                 setattr(new_class, k, v)
 
@@ -61,14 +73,11 @@ class Object(object):
     _fields = {}
 
     def __init__(self, **kwargs):
-        for k, f in self._fields.items():
-            v = kwargs.pop(k, f.default)
-            if f.required and v is None:
-                raise ValidationError('{}.{} is required'.format(self.__class__.__name__, k))
+        for fname in self._required:
+            if fname not in kwargs:
+                raise ValidationError('{}.{} is required'.format(self.__class__.__name__, fname))
 
-            setattr(self, f.name, v)
-
-        for k, v in kwargs.items():
+        for k, v in kwargs.iteritems():
             setattr(self, k, v)
 
     def __getattr__(self, k):
@@ -77,13 +86,9 @@ class Object(object):
     @classmethod
     def deserialize(cls, raw_data):
         data = {}
-        for k, v in raw_data.items():
-            f = cls._fields.get(k)
-            if f is None:
-                data[k] = v
-            else:
-                data[k] = f.deserialize(v)
-
+        deserializers = cls._deserializers
+        for k, v in raw_data.iteritems():
+            data[k] = deserializers.get(k, identity)(v)
         return cls(**data)
 
     def serialize_value(self, value):
@@ -95,20 +100,22 @@ class Object(object):
             return value
 
     def serialize(self):
-        return {k: self.serialize_value(v) for k, v in self.__dict__.items() if v is not None}
+        return {k: self.serialize_value(v) for k, v in self.__dict__.iteritems() if v is not None}
 
 
 class Array(object):
     def __init__(self, datatype):
         self.datatype = datatype
 
+        if hasattr(self.datatype, 'deserialize'):
+            self._deserialize = self.datatype.deserialize
+        else:
+            self._deserialize = self.datatype
+
     def __call__(self, data):
         if data is None:
             return []
-        if hasattr(self.datatype, 'deserialize'):
-            return [self.datatype.deserialize(datum) for datum in data]
-        else:
-            return [self.datatype(datum) for datum in data]
+        return [self._deserialize(datum) for datum in data]
 
     def __str__(self):
         return 'Array of {}'.format(self.datatype)

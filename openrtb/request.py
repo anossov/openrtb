@@ -307,7 +307,7 @@ class Video(Object):
 class Impression(Object):
     u"""At least one impression object is required in a bid request object.
 
-    The “imp” object describes the ad position or impression being auctioned.
+    The “imp” object desribes the ad position or impression being auctioned.
     A single bid request can include multiple “imp” objects,
     a use case for which might be an exchange that supports selling all ad positions on a given page as a bundle.
     Each “imp” object has a required ID so that bids can reference them individually.
