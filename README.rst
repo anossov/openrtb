@@ -1,4 +1,4 @@
-This package contains classes mirroring the `OpenRTB 2.0  <http://www.iab.net/media/file/OpenRTB_API_Specification_Version2.0_FINAL.PDF>`_ and `OpenRTB Mobile 1.0 <https://code.google.com/p/openrtb/downloads/detail?name=OpenRTB%20Mobile%20RTB%20API%20-%201.0.pdf&can=2&q=>`_ protocol schemas.
+This package contains classes mirroring the `OpenRTB 2.2  <http://www.iab.net/media/file/OpenRTB_API_Specification_Version2.0_FINAL.PDF>`_ and `OpenRTB Mobile 1.0 <https://code.google.com/p/openrtb/downloads/detail?name=OpenRTB%20Mobile%20RTB%20API%20-%201.0.pdf&can=2&q=>`_ protocol schemas.
 
 ***************
 Modules
