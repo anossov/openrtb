@@ -342,7 +342,7 @@ class BidRequest(Object):
     at = Field(constants.AuctionType, default=constants.AuctionType.SECOND_PRICE)
     tmax = Field(int)
     wseat = Field(Array(String))
-    allimpd = Field(int)
+    allimps = Field(int)
     cur = Field(Array(String))
     bcat = Field(Array(String))
     badv = Field(Array(String))
