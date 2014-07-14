@@ -42,6 +42,9 @@ Contains the OpenRTB Mobile ``BidRequest`` classes and its subobjects:
  * ``Site``
  * ``App``
  * ``Restrictions``
+ * ``Regulations``
+ * ``PMP``
+ * ``Deal``
 
 Also contains the ``OpenRTB20Adapter`` class that can be used to ``deserialize`` an OpenRTB Mobile bid request into OpenRTB 2.0 objects.
 
@@ -60,6 +63,7 @@ Contains enum-like wrappers around the integer constants used in bid requests (s
  * ``AuctionType``
  * ``BannerType``
  * ``CreativeAttribute``
+ * ``CompanionType``
  * ``AdPosition``
  * ``ConnectionType``
  * ``ExpandableDirection``
@@ -72,6 +76,8 @@ Contains enum-like wrappers around the integer constants used in bid requests (s
  * ``VideoProtocol``
  * ``VideoPlaybackMethod``
  * ``VideoQuality``
+ * ``QAGMediaRating``
+ * ``NoBidReason``
 
 iab
 -----

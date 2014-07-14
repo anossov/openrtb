@@ -37,6 +37,10 @@ class AdPosition(base.Enum):
     VISIBLE = 1
     MAYBE_VISIBLE = 2
     OFFSCREEN = 3
+    HEADER = 4
+    FOOTER = 5
+    SIDEBAR = 6
+    FULLSCREEN = 7
 
 
 class ConnectionType(base.Enum):
@@ -57,6 +61,7 @@ class ExpandableDirection(base.Enum):
     RIGHT = 2
     UP = 3
     DOWN = 4
+    FULLSCREEN = 5
 
 
 class ContentContext(base.Enum):
@@ -84,6 +89,10 @@ class DeviceType(base.Enum):
     MOBILE = 1
     PC = 2
     TV = 3
+    PHONE = 4
+    TABLET = 5
+    CONNECTED_DEVICE = 6
+    SET_TOP_BOX = 7
 
 
 class APIFramework(base.Enum):
@@ -91,6 +100,7 @@ class APIFramework(base.Enum):
     VPAID2 = 2
     MRAID = 3
     ORMMA = 4
+    MRAID2 = 5
 
 
 class VideoLinearity(base.Enum):
@@ -119,3 +129,27 @@ class VideoQuality(base.Enum):
     PROFESSIONALLY_PRODUCED = 1
     PROSUMER = 2
     USER_GENERATED = 3
+
+
+class CompanionType(base.Enum):
+    STATIC = 1
+    HTML = 2
+    IFRAME = 3
+
+
+class QAGMediaRating(base.Enum):
+    ALL_AUDIENCES = 1
+    OVER_12 = 2
+    MATURE = 3
+
+
+class NoBidReason(base.Enum):
+    UNKNOWN = 0
+    TECHNICAL_ERROR = 1
+    INVALID_REQUEST = 2
+    KNOWN_WEB_SPIDER = 3
+    SUSPECTED_NON_HUMAN = 4
+    CLOUD_OR_PROXY_IP = 5
+    UNSUPPORTED_DEVICE = 6
+    BLOCKED_PUBLISHER_OR_SITE = 7
+    UNMATCHED_USER = 8

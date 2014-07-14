@@ -35,6 +35,9 @@ class Bid(Object):
     cid = Field(String)
     crid = Field(String)
     attr = Field(Array(constants.CreativeAttribute))
+    dealid = Field(String)
+    h = Field(int)
+    w = Field(int)
     ext = Field(Object)
 
 
@@ -53,6 +56,7 @@ class SeatBid(Object):
     bid = Field(Array(Bid), required=True)
     seat = Field(String)
     group = Field(int)
+    ext = Field(Object)
 
 
 class BidResponse(Object):
@@ -70,6 +74,7 @@ class BidResponse(Object):
     bidid = Field(String)
     cur = Field(String)
     customdata = Field(String)
+    nbr = Field(constants.NoBidReason)
     ext = Field(Object)
 
     @staticmethod

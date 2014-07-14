@@ -22,6 +22,7 @@ class Publisher(Object):
     name = Field(String)
     cat = Field(Array(String))
     domain = Field(String)
+    ext = Field(Object)
 
 
 class Producer(Object):
@@ -38,6 +39,7 @@ class Producer(Object):
     name = Field(String)
     cat = Field(Array(String))
     domain = Field(String)
+    ext = Field(Object)
 
 
 class Geo(Object):
@@ -61,6 +63,7 @@ class Geo(Object):
     city = Field(String)
     zip = Field(String)
     type = Field(constants.LocationType)
+    ext = Field(Object)
 
     def loc(self):
         if self.lat and self.lon:
@@ -79,6 +82,7 @@ class Segment(Object):
     id = Field(String)
     name = Field(String)
     value = Field(String)
+    ext = Field(Object)
 
 
 class Data(Object):
@@ -95,6 +99,7 @@ class Data(Object):
     id = Field(String)
     name = Field(String)
     segment = Field(Array(Segment))
+    ext = Field(Object)
 
 
 class User(Object):
@@ -117,6 +122,7 @@ class User(Object):
     customdata = Field(String)
     geo = Field(Geo)
     data = Field(Array(Data))
+    ext = Field(Object)
 
 
 class Device(Object):
@@ -139,6 +145,8 @@ class Device(Object):
     didmd5 = Field(String)
     dpidsha1 = Field(String)
     dpidmd5 = Field(String)
+    macsha1 = Field(String)
+    macmd5 = Field(String)
     ipv6 = Field(String)
     carrier = Field(String)
     language = Field(String)
@@ -150,6 +158,8 @@ class Device(Object):
     connectiontype = Field(constants.ConnectionType)
     devicetype = Field(constants.DeviceType)
     flashver = Field(String)
+    ifa = Field(String)
+    ext = Field(Object)
 
     def get_geo(self):
         return self.geo or Geo()
@@ -187,6 +197,10 @@ class Content(Object):
     sourcerelationship = Field(int)
     producer = Field(Producer)
     len = Field(int)
+    qagmediarating = Field(constants.QAGMediaRating)
+    embeddable = Field(int)
+    language = Field(String)
+    ext = Field(Object)
 
 
 class Site(Object):
@@ -212,6 +226,7 @@ class Site(Object):
     publisher = Field(Publisher)
     content = Field(Content)
     keywords = Field(String)
+    ext = Field(Object)
 
 
 class App(Object):
@@ -238,6 +253,8 @@ class App(Object):
     publisher = Field(Publisher)
     content = Field(Content)
     keywords = Field(String)
+    storeurl = Field(String)
+    ext = Field(Object)
 
 
 class Banner(Object):
@@ -255,6 +272,10 @@ class Banner(Object):
 
     w = Field(int)
     h = Field(int)
+    wmax = Field(int)
+    hmax = Field(int)
+    wmin = Field(int)
+    hmin = Field(int)
     id = Field(String)
     pos = Field(constants.AdPosition)
     btype = Field(Array(constants.BannerType))
@@ -263,6 +284,7 @@ class Banner(Object):
     topframe = Field(int)
     expdir = Field(Array(constants.ExpandableDirection))
     api = Field(Array(constants.APIFramework))
+    ext = Field(Object)
 
     def blocked_types(self):
         return set(self.btype or [])
@@ -287,7 +309,8 @@ class Video(Object):
     linearity = Field(constants.VideoLinearity, required=True)
     minduration = Field(int, required=True)
     maxduration = Field(int, required=True)
-    protocol = Field(constants.VideoProtocol, required=True)
+    protocol = Field(constants.VideoProtocol)
+    protocols = Field(Array(constants.VideoProtocol))
     w = Field(int)
     h = Field(int)
     startdelay = Field(int)
@@ -296,12 +319,42 @@ class Video(Object):
     maxextended = Field(int)
     minbitrate = Field(int)
     maxbitrate = Field(int)
-    boxingallowed = Field(int)
+    boxingallowed = Field(int, 1)
     playbackmethod = Field(Array(constants.VideoPlaybackMethod))
     delivery = Field(Array(constants.ContentDeliveryMethod))
     pos = Field(constants.AdPosition)
     companionad = Field(Array(Banner))
+    companiontype = Field(Array(constants.CompanionType))
     api = Field(Array(constants.APIFramework))
+    ext = Field(Object)
+
+
+class Deal(Object):
+    u"""A “deal” object constitutes a deal struck a priori between a buyer and a seller.
+
+    A “deal” object constitutes a deal struck a priori between a buyer and a seller and indicates that
+    this impression is available under the terms of that deal.
+    """
+
+    id = Field(String, required=True)
+    bidfloor = Field(float)
+    bidfloorcur = Field(String, 'USD')
+    wseat = Field(Array(String))
+    wadomain = Field(Array(String))
+    at = Field(constants.AuctionType)
+    ext = Field(Object)
+
+
+class PMP(Object):
+    u"""Top-level object for Direct Deals
+
+    The “pmp” object contains a parent object for usage within the context of private marketplaces
+    and the use of the RTB protocol to execute Direct Deals.
+    """
+
+    private_auction = Field(int)
+    deals = Field(Array(Deal))
+    ext = Field(Object)
 
 
 class Impression(Object):
@@ -317,11 +370,28 @@ class Impression(Object):
     banner = Field(Banner)
     video = Field(Video)
     displaymanager = Field(String)
+    displaymanagerver = Field(String)
     instl = Field(int)
     tagid = Field(String)
     bidfloor = Field(Decimal)
     bidfloorcur = Field(String, default='USD')
+    secure = Field(int)
     iframebuster = Field(Array(String))
+    pmp = Field(PMP)
+    ext = Field(Object)
+
+
+class Regulations(Object):
+    u"""The “regs” object contains any legal, governmental, or industry regulations that apply to the request.
+
+    The first regulation added signal whether or not the request falls under the United States
+    Federal Trade Commission’s regulations for the United States Children’s Online Privacy
+    Protection Act (“COPPA”). See the COPPA appendix for details.
+    The regs object itself and all of its parameters are optional, so default values are not provided.
+    If an optional parameter is not specified, it should be considered unknown.
+    """
+
+    coppa = Field(int)
     ext = Field(Object)
 
 
@@ -346,6 +416,7 @@ class BidRequest(Object):
     cur = Field(Array(String))
     bcat = Field(Array(String))
     badv = Field(Array(String))
+    regs = Field(Regulations)
     ext = Field(Object)
 
     def get_app(self):
