@@ -123,7 +123,7 @@ class Array(object):
 
 class EnumMeta(type):
     def __new__(mcs, name, bases, params):
-        params['values'] = {None: 'None'}
+        params['values'] = {}
         new_class = super(EnumMeta, mcs).__new__(mcs, name, bases, params)
 
         for k, v in params.items():
