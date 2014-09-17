@@ -1,0 +1,4 @@
+2014-09-17  James Wu  <james@videoamp.com> 0.1.2
+    * request.py: Fixed request parameters with default values
+    being misinterpreted as being required parameters
+
