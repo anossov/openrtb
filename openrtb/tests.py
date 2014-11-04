@@ -125,6 +125,10 @@ class TestObjects(unittest.TestCase):
         s = openrtb.request.Site()
         self.assertEqual(s.extra, None)
 
+    def test_ds_none(self):
+        s = openrtb.request.Site.deserialize({'id': None})
+        self.assertEqual(s.id, None)
+
     def test_bid_request_serialize_cycle(self):
         self.maxDiff = None
         brq = openrtb.request.BidRequest.deserialize(BRQ)

@@ -88,7 +88,8 @@ class Object(object):
         data = {}
         deserializers = cls._deserializers
         for k, v in raw_data.iteritems():
-            data[k] = deserializers.get(k, identity)(v)
+            if v is not None:
+                data[k] = deserializers.get(k, identity)(v)
         return cls(**data)
 
     def serialize_value(self, value):
