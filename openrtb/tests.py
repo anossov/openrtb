@@ -78,6 +78,13 @@ class TestFields(unittest.TestCase):
         with self.assertRaises(openrtb.base.ValidationError):
             openrtb.base.Field(int).deserialize('asd')
 
+    def test_convert_enum_fail(self):
+        with self.assertRaises(openrtb.base.ValidationError):
+            openrtb.base.Field(openrtb.base.Enum).deserialize('asd')
+
+    def test_convert_enum(self):
+        self.assertEqual(openrtb.base.Field(openrtb.base.Enum).deserialize('1'), 1)
+
     def test_deserialize(self):
         class O(object):
             v = None
@@ -106,6 +113,16 @@ class TestFields(unittest.TestCase):
 
     def test_default_array(self):
         self.assertEqual(openrtb.base.Array(int)(None), [])
+
+    def test_enum_int(self):
+        self.assertEqual(openrtb.base.Enum(1), 1)
+
+    def test_enum_convert_to_int(self):
+        self.assertEqual(openrtb.base.Enum('1'), 1)
+
+    def test_enum_convert_to_int_fail(self):
+        with self.assertRaises(ValueError):
+            openrtb.base.Enum('x')
 
 
 class TestObjects(unittest.TestCase):

@@ -144,7 +144,7 @@ class Enum(object):
         if isinstance(value, self.__class__):
             value = value.value
 
-        self.value = value
+        self.value = int(value)
         self.name = self.values.get(self.value, None)
 
     def __int__(self):
