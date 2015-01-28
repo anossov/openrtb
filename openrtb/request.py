@@ -408,7 +408,7 @@ class Site(Object):
     page = Field(String)
     ref = Field(String)
     search = Field(String)
-    movile = Field(int)
+    mobile = Field(int)
     privacypolicy = Field(int)
     publisher = Field(Publisher)
     content = Field(Content)
