@@ -31,27 +31,38 @@ class Bid(Object):
     #: ID of the Imp object in the related bid request.
     impid = Field(String, required=True)
 
-    #: Bid price expressed as CPM although the actual transaction is for a unit impression only. Note that while the type indicates float, integer math is highly recommended when handling currencies (e.g., BigDecimal in Java).
+    #: Bid price expressed as CPM although the actual transaction is for a
+    #: unit impression only. Note that while the type indicates float, integer
+    #: math is highly recommended when handling currencies (e.g., BigDecimal in
+    #: Java).
     price = Field(Decimal, required=True)
 
     #: ID of a preloaded ad to be served if the bid wins.
     adid = Field(String)
 
-    #: Win notice URL called by the exchange if the bid wins; optional means of serving ad markup.
+    #: Win notice URL called by the exchange if the bid wins; optional means
+    #: of serving ad markup.
     nurl = Field(String)
 
-    #: Optional means of conveying ad markup in case the bid wins; supersedes the win notice if markup is included in both.
+    #: Optional means of conveying ad markup in case the bid wins; supersedes
+    #: the win notice if markup is included in both.
     adm = Field(String)
 
-    #: Advertiser domain for block list checking (e.g., “ford.com”). This can be an array of for the case of rotating creatives. Exchanges can mandate that only one domain is allowed.
+    #: Advertiser domain for block list checking (e.g., “ford.com”). This can
+    #: be an array of for the case of rotating creatives. Exchanges can mandate
+    #: that only one domain is allowed.
     adomain = Field(Array(String))
 
-    #:Bundle or package name (e.g., com.foo.mygame) of the app being advertised, if applicable; intended to be a unique ID across exchanges.
+    #: Bundle or package name (e.g., com.foo.mygame) of the app being
+    #: advertised, if applicable; intended to be a unique ID across exchanges.
     bundle = Field(String)
-    #: URL without cache-busting to an image that is representative of the content of the campaign for ad quality/safety checking.
+
+    #: URL without cache-busting to an image that is representative of the
+    #: content of the campaign for ad quality/safety checking.
     iurl = Field(String)
 
-    #: Campaign ID to assist with ad quality checking; the collection of creatives for which iurl should be representative.
+    #: Campaign ID to assist with ad quality checking; the collection of
+    #: creatives for which iurl should be representative.
     cid = Field(String)
 
     #: Creative ID to assist with ad quality checking.
@@ -63,7 +74,8 @@ class Bid(Object):
     #: Set of attributes describing the creative. Refer to List 5.3.
     attr = Field(Array(constants.CreativeAttribute))
 
-    #: Reference to the deal.id from the bid request if this bid pertains to a private marketplace direct deal.
+    #: Reference to the deal.id from the bid request if this bid pertains to a
+    #: private marketplace direct deal.
     dealid = Field(String)
 
     #: Height of the creative in pixels.
@@ -89,13 +101,15 @@ class SeatBid(Object):
     in winning any if it can win them all (i.e., all or nothing).
     """
 
-    #: Array of 1+ Bid objects (Section 4.2.3) each related to an impression. Multiple bids can relate to the same impression.
+    #: Array of 1+ Bid objects (Section 4.2.3) each related to an impression.
+    #: Multiple bids can relate to the same impression.
     bid = Field(Array(Bid), required=True)
 
     #: ID of the bidder seat on whose behalf this bid is made.
     seat = Field(String)
 
-    #: 0 = impressions can be won individually; 1 = impressions must be won or lost as a group.
+    #: 0 = impressions can be won individually; 1 = impressions must be won or
+    #: lost as a group.
     group = Field(int)
 
     #: Placeholder for bidder-specific extensions to OpenRTB.
@@ -125,7 +139,10 @@ class BidResponse(Object):
     #: Bid currency using ISO-4217 alpha codes.
     cur = Field(String)
 
-    #: Optional feature to allow a bidder to set data in the exchange’s cookie. The string must be in base85 cookie safe characters and be in any format. Proper JSON encoding must be used to include “escaped” quotation marks.
+    #: Optional feature to allow a bidder to set data in the exchange’s
+    #: cookie. The string must be in base85 cookie safe characters and be in any
+    #: format. Proper JSON encoding must be used to include “escaped” quotation
+    #: marks.
     customdata = Field(String)
 
     #: Reason for not bidding. Refer to List 5.19.
