@@ -151,9 +151,9 @@ class BidResponse(Object):
     #: Placeholder for bidder-specific extensions to OpenRTB.
     ext = Field(Object)
 
-    @staticmethod
-    def minimal(id, bid_id, bid_impid, bid_price):
-        return BidResponse(id=id, seatbid=[
+    @classmethod
+    def minimal(cls, id, bid_id, bid_impid, bid_price):
+        return cls(id=id, seatbid=[
             SeatBid(bid=[
                 Bid(id=bid_id, impid=bid_impid, price=bid_price)
             ])
