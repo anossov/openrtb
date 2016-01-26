@@ -69,7 +69,7 @@ class Bid(Object):
     crid = Field(String)
 
     #: IAB content categories of the creative. Refer to List 5.1.
-    cat = Field(String)
+    cat = Field(Array(String))
 
     #: Set of attributes describing the creative. Refer to List 5.3.
     attr = Field(Array(constants.CreativeAttribute))
