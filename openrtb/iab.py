@@ -23,7 +23,7 @@ CATEGORIES = [
         'Hybrid',
         'Luxury',
         'MiniVan',
-        'Mororcycles',
+        'Motorcycles',
         'Off-Road Vehicles',
         'Performance Vehicles',
         'Pickup',
