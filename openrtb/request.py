@@ -665,7 +665,7 @@ class Video(Object):
 
     #: Indicates if the impression must be linear, nonlinear, etc. If none
     #: specified, assume all are allowed. Refer to List 5.7.
-    linearity = Field(constants.VideoLinearity, required=True)
+    linearity = Field(constants.VideoLinearity)
 
     #: If multiple ad impressions are offered in the same bid request, the
     #: sequence number will allow for the coordinated delivery of multiple
