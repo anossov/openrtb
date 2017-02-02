@@ -97,7 +97,7 @@ class TestFields(unittest.TestCase):
         self.assertEqual(O.v, '1')
 
     def test_unicode(self):
-        self.assertEqual(openrtb.base.String(u'uni'), u'uni')
+        self.assertEqual(openrtb.base.String(u'uni'), u'unin')
 
     def test_ascii(self):
         self.assertEqual(openrtb.base.String('uni'), u'uni')
