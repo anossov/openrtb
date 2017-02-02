@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-u"""
+"""
 RTB transactions are initiated when an exchange or other supply source sends a bid request to a bidder.
 The bid request consists of a bid request object, at least one impression object,
 and may optionally include additional objects providing impression context.
@@ -13,7 +13,7 @@ from .base import Object, Array, String, Field
 
 class Publisher(Object):
 
-    u"""This object describes the publisher of a site or app, depending on which object it is embedded in.
+    """This object describes the publisher of a site or app, depending on which object it is embedded in.
 
     The publisher object itself and all of its parameters are optional, so default values are not provided.
     If an optional parameter is not specified, it should be considered unknown.
@@ -38,7 +38,7 @@ class Publisher(Object):
 
 class Producer(Object):
 
-    u"""This object describes the content of a site or app, depending on which object its parent is embedded in.
+    """This object describes the content of a site or app, depending on which object its parent is embedded in.
 
     The producer is useful when content where the ad is shown is syndicated,
     and may appear on a completely different publisher.
@@ -67,7 +67,7 @@ class Producer(Object):
 
 class Geo(Object):
 
-    u"""Depending on the parent object, this object describes the current geographic location of the device, or it may describe the home geo of the user.
+    """Depending on the parent object, this object describes the current geographic location of the device, or it may describe the home geo of the user.
 
     The geo object itself and all of its parameters are optional, so default values are not provided.
     If an optional parameter is not specified, it should be considered unknown.
@@ -122,7 +122,7 @@ class Geo(Object):
 
 class Segment(Object):
 
-    u"""The segment object is a child of the data object, and describes data segments applicable to the user for the given data provider.
+    """The segment object is a child of the data object, and describes data segments applicable to the user for the given data provider.
 
     The data and segment objects together allow data about the user to be passed to bidders in the bid request.
     Segment objects convey specific units of information from the provider identified in the parent data object.
@@ -145,7 +145,7 @@ class Segment(Object):
 
 class Data(Object):
 
-    u"""The data object is a child of the user object and describes a data source.
+    """The data object is a child of the user object and describes a data source.
     Once segment objects are embedded, data about the user may be passed to bidders.
 
     The data and segment objects together allow data about the user to be passed to bidders in the bid request.
@@ -171,7 +171,7 @@ class Data(Object):
 
 class User(Object):
 
-    u"""This object describes the user, and may include unique identifiers for the user.
+    """This object describes the user, and may include unique identifiers for the user.
 
     The “user” object contains information known or derived about the human user of the device.
     Note that the user ID is an exchange artifact (refer to the “device” object for hardware or platform derived IDs)
@@ -220,7 +220,7 @@ class User(Object):
 
 class Device(Object):
 
-    u"""This object describes the device the ad impression will be delivered to and its capabilities.
+    """This object describes the device the ad impression will be delivered to and its capabilities.
 
     The “device” object provides information pertaining to the device including
     its hardware, platform, location, and carrier.
@@ -332,7 +332,7 @@ class Device(Object):
 
 class Content(Object):
 
-    u"""This object describes the content of a site or app, depending on which object it is embedded in.
+    """This object describes the content of a site or app, depending on which object it is embedded in.
 
     The content object itself and all of its parameters are optional, so default values are not provided.
     If an optional parameter is not specified, it should be considered unknown.
@@ -416,7 +416,7 @@ class Content(Object):
 
 class Site(Object):
 
-    u"""Either a site or app object may be included – not both. Neither is required.
+    """Either a site or app object may be included – not both. Neither is required.
 
     A site object should be included if the ad supported content is part of a website (as opposed to an application).
     A bid request must not contain both a site object and an app object.
@@ -475,7 +475,7 @@ class Site(Object):
 
 class App(Object):
 
-    u"""Either a site or app object may be included – not both. Neither is required.
+    """Either a site or app object may be included – not both. Neither is required.
 
     An “app” object should be included if the ad supported content is part of a mobile
     application (as opposed to a mobile website).
@@ -536,7 +536,7 @@ class App(Object):
 
 class Banner(Object):
 
-    u"""A banner object typically describes an ad opportunity for banner, rich media or in-banner video inventory.
+    """A banner object typically describes an ad opportunity for banner, rich media or in-banner video inventory.
 
     The “banner” object must be included directly in the impression object
     if the impression offered for auction is display or rich media,
@@ -622,7 +622,7 @@ class Banner(Object):
 
 class Video(Object):
 
-    u"""A video object typically describes an ad opportunity for in-stream video inventory.
+    """A video object typically describes an ad opportunity for in-stream video inventory.
 
     The “video” object must be included directly in the impression object if the impression offered
     for auction is an in-stream video ad opportunity.
@@ -723,7 +723,7 @@ class Video(Object):
 
 class Native(Object):
 
-    u"""
+    """
     A “native” object represents a native type impression. Native ad units are
     intended to blend seamlessly into the surrounding content (e.g., a
     sponsored Twitter or Facebook post). As such, the response must be well-
@@ -766,7 +766,7 @@ class Native(Object):
 
 class Deal(Object):
 
-    u"""A “deal” object constitutes a deal struck a priori between a buyer and a seller.
+    """A “deal” object constitutes a deal struck a priori between a buyer and a seller.
 
     A “deal” object constitutes a deal struck a priori between a buyer and a seller and indicates that
     this impression is available under the terms of that deal.
@@ -803,7 +803,7 @@ class Deal(Object):
 
 class PMP(Object):
 
-    u"""Top-level object for Direct Deals
+    """Top-level object for Direct Deals
 
     The “pmp” object contains a parent object for usage within the context of private marketplaces
     and the use of the RTB protocol to execute Direct Deals.
@@ -824,7 +824,7 @@ class PMP(Object):
 
 class Impression(Object):
 
-    u"""At least one impression object is required in a bid request object.
+    """At least one impression object is required in a bid request object.
 
     The “imp” object desribes the ad position or impression being auctioned.
     A single bid request can include multiple “imp” objects,
@@ -891,7 +891,7 @@ class Impression(Object):
 
 class Regulations(Object):
 
-    u"""The “regs” object contains any legal, governmental, or industry regulations that apply to the request.
+    """The “regs” object contains any legal, governmental, or industry regulations that apply to the request.
 
     The first regulation added signal whether or not the request falls under the United States
     Federal Trade Commission’s regulations for the United States Children’s Online Privacy
@@ -910,7 +910,7 @@ class Regulations(Object):
 
 class BidRequest(Object):
 
-    u"""Top-level bid request object.
+    """Top-level bid request object.
 
     The top-level bid request object contains a globally unique bid request or auction ID.
     This “id” attribute is required as is at least one “imp” (i.e., impression) object.

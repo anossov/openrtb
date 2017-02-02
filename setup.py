@@ -17,9 +17,13 @@ setup(name='openrtb',
       classifiers=[
           'Development Status :: 4 - Beta',
           'Programming Language :: Python :: 2.7',
+          'Programming Language :: Python :: 3.5',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: BSD License',
           'Topic :: Software Development :: Libraries',
+      ],
+      install_requires=[
+          'six'
       ],
       url='https://github.com/anossov/openrtb',
       license='BSD',

@@ -1,3 +1,10 @@
+import six
+import codecs
+import sys
+
+print(sys.version)
+
+
 class InvalidConstant(Exception):
     pass
 
@@ -33,14 +40,29 @@ class Field(object):
 
         return v
 
+if six.PY2:
+    def String(value):
+        if isinstance(value, six.text_type):
+            return value
+        elif isinstance(value, six.binary_type):
+            return value.decode('utf-8', errors='ignore')
+        else:
+            value = str(value)
 
-def String(value):
-    if isinstance(value, unicode):
-        return value
-    if isinstance(value, str):
-        return value.decode('utf-8', errors='ignore')
+        return six.u(value)
 
-    return unicode(value)
+elif six.PY3:
+    def String(value):
+        if not isinstance(value, str):
+            value = str(value)
+
+        try:
+            return codecs.decode(six.b(value), 'utf-8', errors="ignore")
+        except UnicodeEncodeError:
+            return value
+
+else:
+    assert False, "Your python version is not supported, sorry"
 
 
 class ObjectMeta(type):
@@ -50,7 +72,7 @@ class ObjectMeta(type):
         new_class._fields = {}
         new_class._required = []
         new_class._deserializers = {}
-        for k, v in attrs.items():
+        for k, v in list(attrs.items()):
             if isinstance(v, Field):
                 v.name = k
                 v.object = new_class
@@ -68,8 +90,8 @@ class ObjectMeta(type):
         return new_class
 
 
+@six.add_metaclass(ObjectMeta)
 class Object(object):
-    __metaclass__ = ObjectMeta
     _fields = {}
 
     def __init__(self, **kwargs):
@@ -77,7 +99,7 @@ class Object(object):
             if fname not in kwargs:
                 raise ValidationError('{}.{} is required'.format(self.__class__.__name__, fname))
 
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __getattr__(self, k):
@@ -87,7 +109,7 @@ class Object(object):
     def deserialize(cls, raw_data):
         data = {}
         deserializers = cls._deserializers
-        for k, v in raw_data.iteritems():
+        for k, v in raw_data.items():
             if v is not None:
                 data[k] = deserializers.get(k, identity)(v)
         return cls(**data)
@@ -101,7 +123,7 @@ class Object(object):
             return value
 
     def serialize(self):
-        return {k: self.serialize_value(v) for k, v in self.__dict__.iteritems() if v is not None}
+        return {k: self.serialize_value(v) for k, v in self.__dict__.items() if v is not None}
 
 
 class Array(object):
@@ -127,7 +149,7 @@ class EnumMeta(type):
         params['values'] = {}
         new_class = super(EnumMeta, mcs).__new__(mcs, name, bases, params)
 
-        for k, v in params.items():
+        for k, v in list(params.items()):
             if isinstance(v, int):
                 new_class.values[v] = k
                 setattr(new_class, k, new_class(v))
@@ -135,9 +157,8 @@ class EnumMeta(type):
         return new_class
 
 
+@six.add_metaclass(EnumMeta)
 class Enum(object):
-    __metaclass__ = EnumMeta
-
     values = {}
 
     def __init__(self, value=None):
