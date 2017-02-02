@@ -6,3 +6,4 @@ MANIFEST
 /sdist/
 /build/
 .idea
+/.tox/

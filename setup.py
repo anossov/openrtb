@@ -23,7 +23,8 @@ setup(name='openrtb',
           'Topic :: Software Development :: Libraries',
       ],
       install_requires=[
-          'six'
+          'six',
+          'tox'
       ],
       url='https://github.com/anossov/openrtb',
       license='BSD',
