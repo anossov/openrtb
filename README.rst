@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/hashtonmartyn/openrtb.svg?branch=master
+    :target: https://travis-ci.org/hashtonmartyn/openrtb
+
 This package contains classes mirroring the `OpenRTB 2.2  <http://www.iab.net/media/file/OpenRTBAPISpecificationVersion2_2.pdf>`_ and `OpenRTB Mobile 1.0 <https://code.google.com/p/openrtb/downloads/detail?name=OpenRTB%20Mobile%20RTB%20API%20-%201.0.pdf&can=2&q=>`_ protocol schemas.
 
 ***************
