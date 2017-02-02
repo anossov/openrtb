@@ -425,7 +425,7 @@ def from_string(s):
         cat = s[3:] if s.startswith('IAB') else s
 
         if '-' in cat:
-            tier1, tier2 = map(int, cat.split('-'))
+            tier1, tier2 = list(map(int, cat.split('-')))
             t1c = CATEGORIES[tier1 - 1][0]
             t2c = CATEGORIES[tier1 - 1][1][tier2 - 1]
             return '{}: {}'.format(t1c, t2c)
