@@ -20,7 +20,7 @@ class Field(object):
     def __init__(self, datatype, required=False, default=None):
         self.datatype = datatype
         self.required = required
-        self.default = default
+        self.default = default if not callable(default) else default()
         self.name = None
         self.object = None
 
