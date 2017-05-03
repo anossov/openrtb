@@ -40,29 +40,13 @@ class Field(object):
 
         return v
 
-if six.PY2:
-    def String(value):
-        if isinstance(value, six.text_type):
-            return value
-        elif isinstance(value, six.binary_type):
-            return value.decode('utf-8', errors='ignore')
-        else:
-            value = str(value)
 
-        return six.u(value)
-
-elif six.PY3:
-    def String(value):
-        if not isinstance(value, str):
-            value = str(value)
-
-        try:
-            return codecs.decode(six.b(value), 'utf-8', errors="ignore")
-        except UnicodeEncodeError:
-            return value
-
-else:
-    assert False, "Your python version is not supported, sorry"
+def String(value, encoding='utf-8', errors='ignore'):
+    if isinstance(value, six.text_type):
+        return value
+    if isinstance(value, six.binary_type):
+        return value.decode(encoding=encoding, errors=errors)
+    return six.text_type(value)
 
 
 class ObjectMeta(type):

@@ -100,13 +100,13 @@ class TestFields(unittest.TestCase):
         self.assertEqual(openrtb.base.String(u'uni'), u'uni')
 
     def test_ascii(self):
-        self.assertEqual(openrtb.base.String('uni'), u'uni')
+        self.assertEqual(openrtb.base.String(b'uni'), u'uni')
 
     def test_utf8(self):
-        self.assertEqual(openrtb.base.String('утф'), u'утф')
+        self.assertEqual(openrtb.base.String(u'утф'.encode('utf-8')), u'утф')
 
     def test_bad_utf8(self):
-        self.assertEqual(openrtb.base.String('x\xff'), u'x')
+        self.assertEqual(openrtb.base.String(b'x\xff'), u'x')
 
     def test_convert_to_unicode(self):
         self.assertEqual(openrtb.base.String(1), u'1')
