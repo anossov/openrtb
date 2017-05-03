@@ -1,12 +1,4 @@
 import six
-import codecs
-import sys
-
-print(sys.version)
-
-
-class InvalidConstant(Exception):
-    pass
 
 
 class ValidationError(Exception):
