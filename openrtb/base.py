@@ -5,32 +5,25 @@ class ValidationError(Exception):
     pass
 
 
-identity = lambda x: x
+def get_deserializer(datatype):
+    if hasattr(datatype, 'deserialize'):
+        return datatype.deserialize
+
+    def deserialize(raw_data):
+        try:
+            return datatype(raw_data)
+        except (ValueError, TypeError):
+            raise ValidationError('should be convertible to {}, got {} instead'
+                                  .format(datatype, type(raw_data)))
+    return deserialize
 
 
 class Field(object):
+
     def __init__(self, datatype, required=False, default=None):
-        self.datatype = datatype
+        self.deserialize = get_deserializer(datatype)
         self.required = required
         self.default = default
-        self.name = None
-        self.object = None
-
-        if hasattr(self.datatype, 'deserialize'):
-            self.deserialize = self.datatype.deserialize
-
-    def deserialize(self, raw_data):
-        try:
-            v = self.datatype(raw_data)
-        except (ValueError, TypeError):
-            raise ValidationError('{}.{} should be convertible to {}, got {}'.format(
-                self.object,
-                self.name,
-                self.datatype,
-                type(raw_data)
-            ))
-
-        return v
 
 
 def String(value, encoding='utf-8', errors='ignore'):
@@ -41,42 +34,34 @@ def String(value, encoding='utf-8', errors='ignore'):
     return six.text_type(value)
 
 
-class ObjectMeta(type):
-    def __new__(mcs, name, bases, attrs):
-        module = attrs.pop('__module__')
-        new_class = super(ObjectMeta, mcs).__new__(mcs, name, bases, {'__module__': module})
-        new_class._fields = {}
-        new_class._required = []
-        new_class._deserializers = {}
-        for k, v in list(attrs.items()):
-            if isinstance(v, Field):
-                v.name = k
-                v.object = new_class
-                new_class._fields[k] = v
-                if hasattr(v.datatype, 'deserialize'):
-                    new_class._deserializers[k] = v.datatype.deserialize
-                else:
-                    new_class._deserializers[k] = v.deserialize
-                if v.required:
-                    new_class._required.append(v.name)
-                setattr(new_class, k, v.default)
-            else:
-                setattr(new_class, k, v)
+def serialize(value):
+    if hasattr(value, 'serialize'):
+        return value.serialize()
+    if isinstance(value, list):
+        return list(six.moves.map(serialize, value))
+    return value
 
-        return new_class
+
+class ObjectMeta(type):
+
+    def __init__(cls, name, bases, attrs):
+        super(ObjectMeta, cls).__init__(name, bases, attrs)
+        named_fields = [item for item in six.iteritems(attrs)
+                        if isinstance(item[1], Field)]
+        cls._deserializers = {name: field.deserialize for name, field in named_fields}
+        cls._defaults = {name: field.default for name, field in named_fields}
+        cls._required = {name for name, field in named_fields if field.required}
 
 
 @six.add_metaclass(ObjectMeta)
 class Object(object):
-    _fields = {}
 
     def __init__(self, **kwargs):
-        for fname in self._required:
-            if fname not in kwargs:
-                raise ValidationError('{}.{} is required'.format(self.__class__.__name__, fname))
-
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+        if not self._required.issubset(kwargs):
+            missing = next(name for name in self._required if name not in kwargs)
+            raise ValidationError('{}.{} is required'
+                                  .format(self.__class__.__name__,  missing))
+        self.__dict__.update(self._defaults, **kwargs)
 
     def __getattr__(self, k):
         return None
@@ -84,40 +69,29 @@ class Object(object):
     @classmethod
     def deserialize(cls, raw_data):
         data = {}
-        deserializers = cls._deserializers
-        for k, v in raw_data.items():
+        get_deserializer = cls._deserializers.get
+        for k, v in six.iteritems(raw_data):
             if v is not None:
-                data[k] = deserializers.get(k, identity)(v)
+                deserialize = get_deserializer(k)
+                data[k] = deserialize(v) if deserialize is not None else v
         return cls(**data)
 
-    def serialize_value(self, value):
-        if hasattr(value, 'serialize'):
-            return value.serialize()
-        elif isinstance(value, list):
-            return [self.serialize_value(v) for v in value]
-        else:
-            return value
-
     def serialize(self):
-        return {k: self.serialize_value(v) for k, v in self.__dict__.items() if v is not None}
+        return {k: serialize(v)
+                for k, v in six.iteritems(self.__dict__)
+                if v is not None}
 
 
 class Array(object):
+
     def __init__(self, datatype):
-        self.datatype = datatype
+        self._deserialize_element = get_deserializer(datatype)
 
-        if hasattr(self.datatype, 'deserialize'):
-            self._deserialize = self.datatype.deserialize
-        else:
-            self._deserialize = self.datatype
+    def deserialize(self, raw_data):
+        return list(six.moves.map(self._deserialize_element, (raw_data or ())))
 
-    def __call__(self, data):
-        if data is None:
-            return []
-        return [self._deserialize(datum) for datum in data]
-
-    def __str__(self):
-        return 'Array of {}'.format(self.datatype)
+    # for backwards compatibility
+    __call__ = deserialize
 
 
 class EnumMeta(type):
@@ -125,7 +99,7 @@ class EnumMeta(type):
         params['values'] = {}
         new_class = super(EnumMeta, mcs).__new__(mcs, name, bases, params)
 
-        for k, v in list(params.items()):
+        for k, v in six.iteritems(params):
             if isinstance(v, int):
                 new_class.values[v] = k
                 setattr(new_class, k, new_class(v))
