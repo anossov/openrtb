@@ -88,6 +88,12 @@ class Geo(Object):
     #: List 5.16.
     type = Field(constants.LocationType)
 
+    accuracy = Field(int)
+
+    lastfix = Field(int)
+
+    ipservice = Field(int)
+
     #: Country code using ISO-3166-1-alpha-3.
     country = Field(String)
 
@@ -188,7 +194,7 @@ class User(Object):
 
     #: Buyer-specific ID for the user as mapped by the exchange for the buyer.
     #: At least one of buyerid or id is recommended.
-    buyerid = Field(String)
+    buyeruid = Field(String)
 
     #: Year of birth as a 4-digit integer.
     yob = Field(int)
@@ -286,15 +292,18 @@ class Device(Object):
     #: Support for JavaScript, where 0 = no, 1 = yes.
     js = Field(int)
 
+    geofetch = Field(int)
+
     #: Version of Flash supported by the browser.
     flashver = Field(String)
 
     #: Browser language using ISO-639-1-alpha-2.
     language = Field(String)
 
-    #: Carrier or ISP (e.g., “VERIZON”). “WIFI” is often used in mobile to
-    #: indicate high bandwidth (e.g., video friendly vs. cellular).
+    #: Carrier or ISP (e.g., “VERIZON”).
     carrier = Field(String)
+
+    mccmnc = Field(String)
 
     #: Network connection type. Refer to List 5.18.
     connectiontype = Field(constants.ConnectionType)
@@ -366,6 +375,14 @@ class Content(Object):
     #: Content season; typically for video content (e.g., “Season 3”).
     season = Field(String)
 
+    artist = Field(String)
+    
+    genre = Field(String)
+
+    album = Field(String)
+
+    isrc = Field(String)
+
     #: Details about the content Producer (Section 3.2.10).
     producer = Field(Producer)
 
@@ -376,11 +393,13 @@ class Content(Object):
     #: Refer to List 5.1.
     cat = Field(Array(String))
 
+    prodq = Field(int)
+
     #: Video quality per IAB’s classification. Refer to List 5.11.
     videoquality = Field(constants.VideoQuality)
 
     #: Type of content (game, video, text, etc.). Refer to List 5.14.
-    context = Field(String)
+    context = Field(int)
 
     #: Content rating (e.g., MPAA).
     contentrating = Field(String)
@@ -409,6 +428,8 @@ class Content(Object):
     #: Indicator of whether or not the content is embeddable (e.g., an
     #: embeddable video player), where 0 = no, 1 = yes.
     embeddable = Field(int)
+
+    data = Field(Array(Object))
 
     #: Placeholder for exchange-specific extensions to OpenRTB.
     ext = Field(Object)
@@ -455,7 +476,7 @@ class Site(Object):
     search = Field(String)
 
     #: Mobile-optimized signal, where 0 = no, 1 = yes.
-    movile = Field(int)
+    mobile = Field(int)
 
     #: Indicates if the site has a privacy policy, where 0 = no, 1 = yes.
     privacypolicy = Field(int)
@@ -533,6 +554,19 @@ class App(Object):
     #: Placeholder for exchange-specific extensions to OpenRTB.
     ext = Field(Object)
 
+class Format(Object):
+
+    w = Field(int)
+
+    h = Field(int)
+
+    wratio = Field(int)
+
+    hratio = Field(int)
+
+    wmin = Field(int)
+
+    ext = Field(Object)
 
 class Banner(Object):
 
@@ -557,6 +591,8 @@ class Banner(Object):
     #: If neither hmin nor hmax are specified, this value is an exact height
     #: requirement. Otherwise it is a preferred height.
     h = Field(int)
+
+    format = Field(Array(Format))
 
     #: Maximum width of the impression in pixels.
     #: If included along with a w value then w should be interpreted as a
@@ -609,6 +645,8 @@ class Banner(Object):
     #: supported.
     api = Field(Array(constants.APIFramework))
 
+    vcm = Field(int)
+
     #: Placeholder for exchange-specific extensions to OpenRTB.
     ext = Field(Object)
 
@@ -618,7 +656,6 @@ class Banner(Object):
     def size(self):
         if self.w and self.h:
             return self.w, self.h
-
 
 class Video(Object):
 
@@ -646,12 +683,12 @@ class Video(Object):
     #: Supported video bid response protocol. Refer to List 5.8. At least one
     #: supported protocol must be specified in either the protocol or protocols
     #: attribute.
-    protocol = Field(constants.VideoProtocol)
+    protocol = Field(constants.Protocol)
 
     #: Array of supported video bid response protocols. Refer to List 5.8. At
     #: least one supported protocol must be specified in either the protocol or
     #: protocols attribute.
-    protocols = Field(Array(constants.VideoProtocol))
+    protocols = Field(Array(constants.Protocol))
 
     #: Width of the video player in pixels.
     w = Field(int)
@@ -663,9 +700,17 @@ class Video(Object):
     #: roll ad placements. Refer to List 5.10 for additional generic values.
     startdelay = Field(int)
 
+    placement = Field(constants.VideoPlacementTypes)
+
     #: Indicates if the impression must be linear, nonlinear, etc. If none
     #: specified, assume all are allowed. Refer to List 5.7.
     linearity = Field(constants.VideoLinearity)
+
+    skip = Field(int)
+
+    skipmin = Field(int, default=0)
+
+    skipafter = Field(int, default=0)
 
     #: If multiple ad impressions are offered in the same bid request, the
     #: sequence number will allow for the coordinated delivery of multiple
@@ -698,6 +743,8 @@ class Video(Object):
     #: Refer to List 5.9.
     playbackmethod = Field(Array(constants.VideoPlaybackMethod))
 
+    playbackend = Field(int)
+
     #: Supported delivery methods (e.g., streaming, progressive). If none
     #: specified, assume all are supported. Refer to List 5.13.
     delivery = Field(Array(constants.ContentDeliveryMethod))
@@ -720,6 +767,116 @@ class Video(Object):
     #: Placeholder for exchange-specific extensions to OpenRTB.
     ext = Field(Object)
 
+class Audio(Object):
+
+    """This object represents an audio type impression. Many of the fields are non-essential for minimally
+    viable transactions, but are included to offer fine control when needed. Audio in OpenRTB generally
+    assumes compliance with the DAAST standard. As such, the notion of companion ads is supported by
+    optionally including an array of Banner objects (refer to the Banner object in Section 3.2.3) that define
+    these companion ads.
+    """
+
+    #: Content MIME types supported (e.g., “audio/mp4”).
+    mimes = Field(Array(String), required=True)
+
+    #: Minimum audio ad duration in seconds.
+    minduration = Field(int)
+
+    #: Maximum audio ad duration in seconds.
+    maxduration = Field(int)
+
+    #: Array of supported video bid response protocols. Refer to List 5.8. At
+    #: least one supported protocol must be specified in either the protocol or
+    #: protocols attribute.
+    protocols = Field(Array(constants.Protocol))
+
+    #: Indicates the start delay in seconds for pre-roll, mid-roll, or post-roll ad placements. Refer to List 5.10
+    startdelay = Field(int)
+
+    #: If multiple ad impressions are offered in the same bid request, the
+    #: sequence number will allow for the coordinated delivery of multiple
+    #: creatives.
+    sequence = Field(int, default=1)
+
+    #: Blocked creative attributes. Refer to List 5.3.
+    battr = Field(Array(constants.CreativeAttribute))
+
+    #: Maximum extended video ad duration if extension is allowed. If blank or
+    #: 0, extension is not allowed. If -1, extension is allowed, and there is no
+    #: time limit imposed. If greater than 0, then the value represents the
+    #: number of seconds of extended play supported beyond the maxduration
+    #: value.
+    maxextended = Field(int)
+
+    #: Minimum bit rate in Kbps. Exchange may set this dynamically or
+    #: universally across their set of publishers.
+    minbitrate = Field(int)
+
+    #: Maximum bit rate in Kbps. Exchange may set this dynamically or
+    #: universally across their set of publishers.
+    maxbitrate = Field(int)
+
+    #: Supported delivery methods (e.g., streaming, progressive). If none
+    #: specified, assume all are supported. Refer to List 5.13.
+    delivery = Field(Array(constants.ContentDeliveryMethod))
+
+    #: Array of Banner objects (Section 3.2.3) if companion ads are available.
+    companionad = Field(Array(Banner))
+
+    #: List of supported API frameworks for this impression. Refer to List
+    #: 5.6. If an API is not explicitly listed, it is assumed not to be
+    #: supported.
+    api = Field(Array(constants.APIFramework))
+
+    #: Supported VAST companion ad types. Refer to List 5.12. Recommended if
+    #: companion Banner objects are included via the companionad array.
+    companiontype = Field(Array(constants.CompanionType))
+
+    maxseq = Field(int)
+
+    feed = Field(constants.Feed)
+
+    stitched = Field(int)
+
+    nvol = Field(constants.VolumeNormalizationModes)
+
+    #: Placeholder for exchange-specific extensions to OpenRTB.
+    ext = Field(Object)
+
+class Metric(Object):
+
+    """This object is associated with an impression as an array of metrics. These metrics can offer insight into
+    the impression to assist with decisioning such as average recent viewability, click-through rate, etc. Each
+    metric is identified by its type, reports the value of the metric, and optionally identifies the source or
+    vendor measuring the value.
+    """
+
+    type = Field(String, required=True)
+
+    value = Field(float)
+
+    vendor = Field(String)
+
+    ext = Field(Object)
+
+
+class Source(Object):
+
+    """This object describes the nature and behavior of the entity that is the source of the bid request
+    upstream from the exchange. The primary purpose of this object is to define post-auction or upstream
+    decisioning when the exchange itself does not control the final decision. A common example of this is
+    header bidding, but it can also apply to upstream server entities such as another RTB exchange, a
+    mediation platform, or an ad server combines direct campaigns with 3rd party demand in decisioning.
+    """
+
+    fd = Field(int)
+
+    tid = Field(String)
+
+    pchain = Field(String)
+
+    ext = Field(Object)
+    
 
 class Native(Object):
 
@@ -812,7 +969,7 @@ class PMP(Object):
     #: Indicator of auction eligibility to seats named in the Direct Deals
     #: object, where 0 = all bids are accepted, 1 = bids are restricted to the
     #: deals specified and the terms thereof.
-    private_auction = Field(int)
+    private_auction = Field(int, default=0)
 
     #: Array of Deal (Section 3.2.18) objects that convey the specific deals
     #: applicable to this impression.
@@ -836,6 +993,8 @@ class Impression(Object):
     #    request (typically, starts with 1 and increments.
     id = Field(String, required=True)
 
+    metric = Field(Metric)
+
     #: A Banner object (Section 3.2.3); required if this impression is offered
     #: as a banner ad opportunity.
     banner = Field(Banner)
@@ -843,6 +1002,8 @@ class Impression(Object):
     #: A Video object (Section 3.2.4); required if this impression is offered
     #: as a video ad opportunity.
     video = Field(Video)
+
+    audio = Field(Audio)
 
     #: A Native object (Section 3.2.5); required if this impression is offered
     #: as a native ad opportunity.
@@ -873,6 +1034,8 @@ class Impression(Object):
     #: from bid currency returned by bidder if this is allowed by the exchange.
     bidfloorcur = Field(String, default='USD')
 
+    clickbrowser = Field(int)
+
     #: Flag to indicate if the impression requires secure HTTPS URL creative
     #: assets and markup, where 0 = non-secure, 1 = secure. If omitted, the
     #: secure state is unknown, but non-secure HTTP support can be assumed.
@@ -884,6 +1047,8 @@ class Impression(Object):
     #: A Pmp object (Section 3.2.17) containing any private marketplace deals
     #: in effect for this impression.
     pmp = Field(PMP)
+
+    exp = Field(int)
 
     #: Placeholder for exchange-specific extensions to OpenRTB.
     ext = Field(Object)
@@ -958,6 +1123,8 @@ class BidRequest(Object):
     #: implies no seat restrictions.
     wseat = Field(Array(String))
 
+    bseat = Field(Array(String))
+
     #: Flag to indicate if Exchange can verify that the impressions offered
     #: represent all of the impressions available in context (e.g., all on the
     #: web page, all video spots such as pre/mid/post roll) to support road-
@@ -970,12 +1137,18 @@ class BidRequest(Object):
     #: currencies.
     cur = Field(Array(String))
 
+    wlang = Field(Array(String))
+
     #: Blocked advertiser categories using the IAB content categories. Refer
     #: to List 5.1.
     bcat = Field(Array(String))
 
     #: Block list of advertisers by their domains (e.g., “ford.com”).
     badv = Field(Array(String))
+
+    bapp = Field(Array(String))
+
+    source = Field(Source)
 
     #: A Regs object (Section 3.2.16) that specifies any industry, legal, or
     #: governmental regulations in force for this request.

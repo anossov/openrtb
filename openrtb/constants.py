@@ -30,6 +30,7 @@ class CreativeAttribute(base.Enum):
     DIALOG = 14
     AUDIO_ONOFF = 15
     SKIPPABLE = 16
+    ADOBE_FLASH = 17
 
 
 class AdPosition(base.Enum):
@@ -101,27 +102,51 @@ class APIFramework(base.Enum):
     MRAID = 3
     ORMMA = 4
     MRAID2 = 5
+    MRAID3 = 6
 
 
 class VideoLinearity(base.Enum):
     LINEAR = 1
     NON_LINEAR = 2
 
+class Feed(base.Enum):
+    MUSIC = 1
+    FM_AM = 2
+    PODCAST = 3
 
-class VideoProtocol(base.Enum):
+class Protocol(base.Enum):
     VAST1 = 1
     VAST2 = 2
     VAST3 = 3
     VAST1_WRAPPER = 4
     VAST2_WRAPPER = 5
     VAST3_WRAPPER = 6
+    VAST4 = 7
+    VAST4_WRAPPER = 8
+    DAAST1 = 9
+    DAAST1_WRAPPER = 10
 
+class VolumeNormalizationModes(base.Enum):
+    NONE = 0
+    VOLUME_AVERAGE = 1
+    VOLUME_PEAK = 2
+    LOUDNESS = 3
+    CUSTOM = 4
+
+class VideoPlacementTypes(base.Enum):
+    IN_STREAM = 1
+    IN_BANNER = 2
+    IN_ARTICLE = 3
+    IN_FEED = 4
+    FULL = 5
 
 class VideoPlaybackMethod(base.Enum):
     AUTOPLAY_SOUND_ON = 1
     AUTOPLAY_SOUND_OFF = 2
     CLICK_TO_PLAY = 3
     MOUSE_OVER = 4
+    VIEWPORT_ENTER_SOUND_ON = 5
+    VIEWPORT_ENTER_SOUND_OFF = 6
 
 
 class VideoQuality(base.Enum):
@@ -153,3 +178,5 @@ class NoBidReason(base.Enum):
     UNSUPPORTED_DEVICE = 6
     BLOCKED_PUBLISHER_OR_SITE = 7
     UNMATCHED_USER = 8
+    READER_CAP_MET = 9
+    DOMAIN_CAP_MET = 10
